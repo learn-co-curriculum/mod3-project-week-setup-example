@@ -11,15 +11,15 @@ class Notes {
   notesIndex() {
     this.notes = []
     this.adapter.loadAllNotesInto(this.notes)
-    .then( () => this.notesNode.innerHTML = this.render() )
+    .then( this.render.bind(this) )
   }
 
   addNote() {
     event.preventDefault()
     let body = this.noteInput.value
     this.adapter.createNote(body)
-    .then( (noteJSON) => this.notes.push(new Note(noteJSON)) )
-    .then( () => this.notesIndex() )
+    .then( (noteJSON) => this.notes.push(new Note(noteJSON.body)) )
+    .then(  this.render.bind(this) )
     .then( () => this.noteInput.value = '' )
   }
 
@@ -28,6 +28,6 @@ class Notes {
   }
 
   render() {
-    return `<ul>${this.notesHTML()}</ul>`
+    this.notesNode.innerHTML = `<ul>${this.notesHTML()}</ul>`
   }
 }
