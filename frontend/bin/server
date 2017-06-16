@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Good luck on your JS project week! May the debugger be with you."
+python -m  SimpleHTTPServer
+
