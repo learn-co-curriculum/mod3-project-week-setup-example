@@ -1,5 +1,5 @@
 class Api::V1::NotesController < ApplicationController
-  before_action :set_note, only: [:show,:update,:destory]
+  before_action :set_note, only: [:show,:update,:destroy]
 
   def index
     notes = Note.all
@@ -17,8 +17,9 @@ class Api::V1::NotesController < ApplicationController
   end
 
   def destroy
-    @note.destory
-    render json: {message:"You successfully delete the note"}, status: 204
+    noteId = @note.id
+    @note.destroy
+    render json: {message:"Zap! Note deleted", noteId:noteId}
   end
 
   def show

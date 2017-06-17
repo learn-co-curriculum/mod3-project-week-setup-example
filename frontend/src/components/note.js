@@ -1,9 +1,10 @@
 class Note {
-  constructor(body) {
-    this.body = body
+  constructor(noteJSON) {
+    this.body = noteJSON.body
+    this.id = noteJSON.id
   }
 
   render() {
-    return `<li class='note'>${this.body} </li>`
+    return `<li data-noteid='${this.id}' data-props='${JSON.stringify(this)}' class='note-element'>${this.body} <span class="delete-note-link">x</span></li>`
   }
 }

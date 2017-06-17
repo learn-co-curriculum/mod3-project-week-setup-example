@@ -37,7 +37,7 @@ module Backend
         origins '*'
         # Defines which resources and http verbs are allowed
         # Documentation for the options verb: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
+        resource '*', :headers => :any, :methods => [:get, :post, :delete, :options]
       end
     end
   end

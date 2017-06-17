@@ -18,3 +18,7 @@ input {
 ul {
   padding-left: 20px;
 }
+
+.delete-note-link {
+  color:gray;
+}

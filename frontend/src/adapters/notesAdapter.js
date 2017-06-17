@@ -8,13 +8,24 @@ class NotesAdapter {
     .then( resp => resp.json() )
   }
 
+  deleteNote(noteId) {
+    const deleteUrl = `${this.baseUrl}/${noteId}`
+    const noteDeleteParams = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type':'application/json'
+      }
+      }
+      return fetch(deleteUrl,noteDeleteParams).then( resp => resp.json() )
+  }
+
   loadAllNotesInto(array) {
     return this.getNotes()
-    .then( notesJSON => notesJSON.forEach(note => array.push(new Note(note.body)) ) )
+    .then( notesJSON => notesJSON.forEach( note => array.push( new Note(note) )))
   }
 
   createNote(body) {
-    let noteCreateParams = {
+    const noteCreateParams = {
       method: 'POST',
       headers: {
         'Content-Type':'application/json'
