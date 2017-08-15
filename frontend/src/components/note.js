@@ -5,6 +5,6 @@ class Note {
   }
 
   render() {
-    return `<li data-noteid='${this.id}' data-props='${JSON.stringify(this)}' class='note-element'>${this.body} <span class="delete-note-link">x</span></li>`
+    return `<li data-noteid='${this.id}' data-props='${JSON.stringify(this)}' class='note-element'>${this.body} <i data-action='delete-note' class="em em-scream_cat"></i></li>`
   }
 }

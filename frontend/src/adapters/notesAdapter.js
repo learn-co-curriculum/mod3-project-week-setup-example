@@ -19,18 +19,13 @@ class NotesAdapter {
       return fetch(deleteUrl,noteDeleteParams).then( resp => resp.json() )
   }
 
-  loadAllNotesInto(array) {
-    return this.getNotes()
-    .then( notesJSON => notesJSON.forEach( note => array.push( new Note(note) )))
-  }
-
   createNote(body) {
     const noteCreateParams = {
       method: 'POST',
       headers: {
         'Content-Type':'application/json'
       },
-      body: JSON.stringify({body:body})
+      body: JSON.stringify({body})
     }
     return fetch(this.baseUrl,noteCreateParams).then( resp => resp.json() )
   }

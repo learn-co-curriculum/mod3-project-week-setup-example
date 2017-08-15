@@ -1,11 +1,12 @@
 class Notes {
   constructor() {
-    this.notesBindings()
+    this.notes = []
+    this.initBindingsAndEventListiners()
     this.adapter = new NotesAdapter()
     this.fetchAndLoadNotes()
   }
 
-  notesBindings() {
+  initBindingsAndEventListiners() {
     this.notesForm = document.getElementById('new-note-form')
     this.noteInput = document.getElementById('new-note-body')
     this.notesNode = document.getElementById('notes-container')
@@ -14,14 +15,15 @@ class Notes {
   }
 
   fetchAndLoadNotes() {
-    this.notes = []
-    this.adapter.loadAllNotesInto(this.notes)
-    .then( this.render.bind(this) )
+    this.adapter.getNotes()
+    .then( notesJSON => notesJSON.forEach( note => this.notes.push( new Note(note) )))
+      .then( this.render.bind(this) )
+      .catch( () => alert('The server does not appear to be running') )
   }
 
   handleAddNote() {
     event.preventDefault()
-    let body = this.noteInput.value
+    const body = this.noteInput.value
     this.adapter.createNote(body)
     .then( (noteJSON) => this.notes.push(new Note(noteJSON)) )
     .then(  this.render.bind(this) )
@@ -29,7 +31,7 @@ class Notes {
   }
 
   handleDeleteNote() {
-    if (event.target.parentElement.classList.contains("note-element")) {
+    if (event.target.dataset.action === 'delete-note' && event.target.parentElement.classList.contains("note-element")) {
       const noteId = event.target.parentElement.dataset.noteid
       this.adapter.deleteNote(noteId)
       .then( resp => this.removeDeletedNote(resp) )
@@ -37,11 +39,8 @@ class Notes {
   }
 
   removeDeletedNote(deleteResponse) {
-    const nodeObjToRemove = this.notes.filter( note => note.id === deleteResponse.noteId )
-    const indexOfNoteToRemove = this.notes.indexOf( nodeObjToRemove[0] )
-    this.notes.splice(indexOfNoteToRemove,1)
+    this.notes = this.notes.filter( note => note.id !== deleteResponse.noteId )
     this.render()
-    return deleteResponse
   }
 
   notesHTML() {
