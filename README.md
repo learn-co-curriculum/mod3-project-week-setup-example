@@ -10,8 +10,7 @@ We are going to need two separate repositories. This guide has everything in one
 
   + In your terminal enter the following command:
 
-  + `rails new MY-NEW-PROJECT-NAME --database=postgresql --api && cd $_`
-    + `&& cd $_ will automatically change into that newly created directory`
+  + `rails new MY-NEW-PROJECT-NAME --database=postgresql --api`
 
   + **Replace MY-NEW-PROJECT-NAME with the *actual* name of your project**
 
