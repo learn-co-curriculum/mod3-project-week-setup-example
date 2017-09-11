@@ -5,6 +5,10 @@ body {
    font-size: 1.3em;
 }
 
+a {
+  color:#97659;
+}
+
 input {
   font-size: 1.5em;
 }
