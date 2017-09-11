@@ -250,6 +250,8 @@ class NotesAdapter {
 
 ```
 
+Make sure you read through the code and understand what's going on here before moving on. The notesAdapter component is responsible for communicating with our API backend.
+
 ---
 
 + `cd..` up on level and then `cd` down into `components` and let's make three files:
