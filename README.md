@@ -381,6 +381,6 @@ ul {
 ```
 # Last Step
 
-+ Open up `index.html` and marvel at our work! **Make sure you're still running your rails server** Our seed data is loaded from the API and we are able to submit new comments and watch as they appear on the page. NOICE!
++ **Make sure you're still running your rails server** and open up `index.html` and marvel at our work! Our seed data is loaded from the API and we are able to submit new comments and watch as they appear on the page. NOICE!
 
 ![alt text](https://media.giphy.com/media/RDbZGZ3O0UmL6/giphy.gif "DJ Khalid with a comically large bottle of champagne in his pool")
