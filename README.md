@@ -145,9 +145,13 @@ The namespacing means our api can be accessed by navigating to `http://localhost
 
 If that worked, then congratulations!! Now it's time to setup the frontend.
 
+---
+
 # Setting Up the Frontend
 
 Make sure you create **a separate directory and a separate GitHub repository for the frontend**
+
+Open up a new terminal window `command t` and leave your rails server up and running
 
 Once there, `cd` into that directory on your computer and we'll start building out the frontend
 
@@ -378,6 +382,6 @@ ul {
 ```
 # Last Step
 
-+ Open up `index.html` and marvel at our work! Our seed data is loaded from the API and we are able to submit new comments and watch as they appear on the page. NOICE!
++ Open up `index.html` and marvel at our work! **Make sure you're still running your rails server** Our seed data is loaded from the API and we are able to submit new comments and watch as they appear on the page. NOICE!
 
 ![alt text](https://media.giphy.com/media/RDbZGZ3O0UmL6/giphy.gif "DJ Khalid with a comically large bottle of champagne in his pool")
