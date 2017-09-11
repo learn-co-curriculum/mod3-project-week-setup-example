@@ -59,6 +59,8 @@ As you may recall from the [JS fetch() documentation](https://github.github.io/f
 
 This may come as a shock but `config.api_only = true` tells our app that it is going to be an **API only**. In other words, our API **will not generate any HTML** and instead will return JSON. The frontend is responsible for taking that JSON, formatting the data, and generating HTML to show to the user.
 
+For now, we will leave the origins open. Later on, we can change this to only allow requests from the address of the frontend repo––localhost:8000 for example.
+
 ---
 
 + Next we are going to create our Notes controller: `rails g controller api/v1/Notes`
