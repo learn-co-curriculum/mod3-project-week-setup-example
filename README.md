@@ -149,7 +149,7 @@ If that worked, then congratulations!! Now it's time to setup the frontend.
 
 Make sure you create **a separate directory and a separate GitHub repository for the frontend**
 
-Once there, `cd` into that directory and we'll start building out the frontend
+Once there, `cd` into that directory on your computer and we'll start building out the frontend
 
 + Let's create the files and folders we'll need:
 
