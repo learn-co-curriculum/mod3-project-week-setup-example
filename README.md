@@ -100,7 +100,7 @@ A few things are happening in the above methods:
 
 ---
 
-In `db/migrate` add this to `db/seeds.rb`:
+Add the following to `db/seeds.rb`:
 
 ```
 Note.create([
