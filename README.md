@@ -174,11 +174,6 @@ Once there, `cd` into that directory on your computer and we'll start building o
     <title>Sample JS Project frontend</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles/style.css">
-    <style>
-      a {
-        color:#97659;
-      }
-    </style>
   </head>
   <body>
     <div class="container">
@@ -361,6 +356,10 @@ body {
    line-height: 1.6em;
    font-size: 1.3em;
 }
+
+a {
+    color:#97659;
+   }
 
 input {
   font-size: 1.5em;
