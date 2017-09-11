@@ -13,6 +13,8 @@ We are going to need two separate repositories. This guide has everything in one
   + `rails new MY-NEW-PROJECT-NAME --database=postgresql --api`
 
   + **Replace MY-NEW-PROJECT-NAME with the *actual* name of your project**
+  
+  + `cd` into the new project you just created
 
   + This will generate a new rails project using postgres as the database. **Make sure you are running postgres on your computer**. Look for the elephant icon at the top of your screen.
 
