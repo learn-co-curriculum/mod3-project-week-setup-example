@@ -1,12 +1,12 @@
 class Notes {
   constructor() {
     this.notes = []
-    this.initBindingsAndEventListiners()
+    this.initBindingsAndEventListeners()
     this.adapter = new NotesAdapter()
     this.fetchAndLoadNotes()
   }
 
-  initBindingsAndEventListiners() {
+  initBindingsAndEventListeners() {
     this.notesForm = document.getElementById('new-note-form')
     this.noteInput = document.getElementById('new-note-body')
     this.notesNode = document.getElementById('notes-container')
