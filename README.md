@@ -96,7 +96,7 @@ A few things are happening in the above methods:
 
 ---
 
-+ Next let's setup our model: `rails g model Notes body:string`
++ Next let's setup our model: `rails g model Note body:string`
 
 ---
 
@@ -223,17 +223,6 @@ class NotesAdapter {
     return fetch(this.baseUrl).then(response => response.json())
   }
 
-  deleteNote(noteId) {
-    const deleteUrl = `${this.baseUrl}/${noteId}`
-    const noteDeleteParams = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type':'application/json'
-      }
-    }
-    return fetch(deleteUrl, noteDeleteParams).then(response => response.json())
-  }
-
   createNote(body) {
     const noteCreateParams = {
       method: 'POST',
@@ -278,12 +267,12 @@ Let's review the flow of the app: `index.js` gets loaded and calls `new App()` w
 class Notes {
   constructor() {
     this.notes = []
-    this.initBindingsAndEventListiners()
+    this.initBindingsAndEventListeners()
     this.adapter = new NotesAdapter()
     this.fetchAndLoadNotes()
   }
 
-  initBindingsAndEventListiners() {
+  initBindingsAndEventListeners() {
     this.notesForm = document.getElementById('new-note-form')
     this.noteInput = document.getElementById('new-note-body')
     this.notesNode = document.getElementById('notes-container')
