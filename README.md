@@ -284,7 +284,7 @@ class Notes {
     this.adapter.getNotes()
     .then( notesJSON => notesJSON.forEach( note => this.notes.push( new Note(note) )))
       .then( this.render.bind(this) )
-      .catch( () => alert('The server does not appear to be running') )
+      .catch( (error) => console.log(error) )
   }
 
   handleAddNote() {
