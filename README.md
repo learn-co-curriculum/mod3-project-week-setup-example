@@ -112,7 +112,7 @@ Note.create([
   { body: 'Design your data model and define the structure of your JSON data.' },
   { body: 'Remember to namespace your <a target="_blank" href="http://guides.rubyonrails.org/routing.html#controller-namespaces-and-routing">routes and controllers</a>.' },
   { body: 'Learn <a href="https://chriskottom.com/blog/2017/04/versioning-a-rails-api"/>why</a> version an API'},
-  { body: 'When lost take a walk, then bifriend <a target="_blank" href="https://developer.mozilla.org/en-US/">MDN</a> and <a target="_blank" href="http://api.rubyonrails.org/">api.rubyonrails.org</a>.' }
+  { body: 'When lost take a walk, then befriend <a target="_blank" href="https://developer.mozilla.org/en-US/">MDN</a> and <a target="_blank" href="http://api.rubyonrails.org/">api.rubyonrails.org</a>.' }
   ])
 ```
 
