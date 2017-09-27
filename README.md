@@ -30,7 +30,7 @@ We are going to need two separate repositories. This guide has everything in one
 
 ---
 
-+ Inside of `config/application.rb` **type** the following code:
++ Inside of `config/initializers/cors.rb` uncomment the following code:
 
 ```
 module JsProjectWeekSetup
