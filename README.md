@@ -33,20 +33,16 @@ We are going to need two separate repositories. This guide has everything in one
 + Inside of `config/initializers/cors.rb` uncomment the following code:
 
 ```
-module JsProjectWeekSetup
-  class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins '*'
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :patch, :delete, :options]
-      end
-    end
-    config.api_only = true
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
   end
 end
+
 ```
 
 This snippet is from the [documentation for the rack-cors gem](https://github.com/cyu/rack-cors)
