@@ -136,59 +136,29 @@ At this point it is probably a good idea to add some seed data and make sure eve
 ---
 
 # Setting Up the Frontend Client Application
+![Wild West](http://chrisenss.com/wp-content/uploads/2016/10/wildwest.png)
+
+Coming from Module 2 , you may be used to a framework such as Ruby on Rails being very *opinionated*. That is, it has a lot of options about how your application should be structured.  The same rules don't apply on the frontend, there is not *one right way to structure your code*. Specifically, we are not using any frontend framwork and many of the design decisions will be left up to you.
+
+Here, we'll walk through one feature and provide some example code. The example code will be a reasonable/sensible way to structure this application. You should learn what you can from it and structure your code in a similar pattern.  
+
+The key word here is *similar*, rather than directly copying the patterns shown apply the principles you have learned (oo, single responsibility principle, encapsulation) to make code that will be easy for you and your partner to work with as your application grows.
+
+### Inital Setup
 
 Make sure you create **a separate directory and a separate GitHub repository for the frontend**
 
 Tip: you can open up a new tab in terminal window `command + t` if you'd like to have your rails server up and running in another tab
 
+In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files. At minimum you should have an file called `src/index.js` inside of the `src` folder.
 
-In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files.
+In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "doc" and then press tab to auto-generate the starter HTML.
+
+### Example Feature (Fetching Notes)
+
+TODO: pick up here
 
 
-+ Add the following to `index.html`
-
-```
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Sample JS Project frontend</title>
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles/style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div id="new-note-container">
-        <form id="new-note-form">
-          <input type="text" name="note-body" id="new-note-body">
-          <input type="submit" value="Save note">
-        </form>
-      </div>
-      <div id="notes-container">
-
-      </div>
-    </div>
-
-    <script type="text/javascript" src="src/components/note.js"></script>
-    <script type="text/javascript" src="src/adapters/notesAdapter.js"></script>
-    <script type="text/javascript" src="src/components/notes.js"></script>
-    <script type="text/javascript" src="src/components/app.js"></script>
-    <script type="text/javascript" src="src/index.js"></script>
-  </body>
-</html>
-```
-Notice that we have a form to create a new note as well as a `notes-container` div. Our notes will be rendered inside this div. We're also loading several JS files: `note.js`, `notesAdapter.js`, `notes.js`, `app.js`, `index.js`
-
----
-
-+ `cd` into src then
-
-  + `touch index.js`
-
-  + `mkdir adapters components`
-
-+ Add the following line to `index.js`: `const app = new App()` Our index file has one responsibility: kicking off the app by creating a new App object
-
----
 
 + `cd` into `adapters` and `touch notesAdapter.js`. We will build out the `notesAdapter` in this file. The adapter will be responsible for communicating with our rails API backend
 
