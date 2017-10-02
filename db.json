@@ -1,0 +1,32 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "title": "Research for Blog Post",
+      "body":
+        "I don't really understand the way fetch handles bad requests (400 level status code), do research and provide example for blog post"
+    },
+    {
+      "id": "2",
+      "title": "Good idea for YA novel",
+      "body":
+        "Young Adult novel about a kid who's apartment is on the top floor of a functioning MegaBus"
+    },
+    {
+      "id": "3",
+      "title": "Ask friend for music",
+      "body": "Reminder to ask D. about the playlist from last weekend"
+    },
+    {
+      "id": "4",
+      "title": "More notes on fetch",
+      "body":
+        "Reminder that .then(res => res.json()) will fail if the response is not valid JSON (i.e it's an empty string)"
+    },
+    {
+      "id": "5",
+      "title": "Alternatives to fetch",
+      "body": "Look up 'axios' library"
+    }
+  ]
+}

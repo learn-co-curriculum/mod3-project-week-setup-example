@@ -82,9 +82,9 @@ Notice that the controller file this created lives in `/app/controllers/api/v1/n
 **Note on API Versioning:**
 *This is the first version of our API. Therefore, the controller should go inside api/v1. If anyone is relying on our API and we update the code in a way that would break other people's projects, it's good practice to make that update its own version of the API. Read [this](https://chriskottom.com/blog/2017/04/versioning-a-rails-api/) if you're curious about API versioning.*
 
-Add our index and create methods to `/app/controllers/api/v1/notes_controller`:
+We'll only be dealing with the index and update actions for this example `/app/controllers/api/v1/notes_controller`:
 
-```
+```ruby
 class Api::V1::NotesController < ApplicationController
 
   def index
@@ -92,14 +92,20 @@ class Api::V1::NotesController < ApplicationController
     render json: @notes
   end
 
-  def create
-    @note = Note.create(note_params)
-    render json: @note
+  def update
+    @note = Note.find(params[:id])
+
+    @note.update(note_params)
+    if @note.save
+      render json: @note
+    else
+      render json: {errors: @note.errors.full_messages}, status: 422
+    end
   end
 
   private
   def note_params
-    params.permit(:content)
+    params.permit(:title, :content)
   end
 
 end
@@ -108,17 +114,17 @@ end
 A few things are happening in the above methods:
 1. We're rendering all notes in the form of JSON
 2. We're creating a new note based on whatever note_params we get from our *frontend*
-3. We're setting out `note_params` to permit a parameter named `content` *that must be included in the body of the POST request we will be making with JS `fetch`*
+3. We're setting out `note_params` to permit a parameter named `title` and a parameter named `content`. *These must be included in the body of the POST or PATCH requests we will be making with JS `fetch`*
 
 ### Example Routes
 
 The routes we define in `config/routes.rb` need to correspond to the namespaced controller we created. They should be defined as follows:
 
-```
+```ruby
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :notes, only: [:index, :create]
+      resources :notes, only: [:index, :update]
     end
   end
 end
@@ -140,11 +146,11 @@ At this point it is probably a good idea to add some seed data and make sure eve
 
 Coming from Module 2 , you may be used to a framework such as Ruby on Rails being very *opinionated*. That is, it has a lot of opinions about how your application should be structured.  The same rules don't apply on the frontend, there is *not one right way to structure your code*. Specifically, we are not using any frontend framwork and many of the design decisions will be left up to you.
 
-Here, we'll walk through one feature and provide some example code. The example code will be a reasonable/sensible way to structure this application. You should learn what you can from it and structure your code in a similar pattern.  
+Here, we'll walk through one feature and provide some example code. The example code will demonstrate a reasonable/sensible way to structure this application. You should learn what you can from it and structure your code in a similar pattern.  
 
-The key word here is *similar*, rather than directly copying the patterns shown apply the principles you have learned (oo, single responsibility principle, encapsulation) to make code that will be easy for you and your partner to work with as your application grows.
+The key word here is *similar*, rather than directly copying the patterns shown, try to apply the principles you have learned (oo, single responsibility principle, encapsulation) to make code that will be easy for you and your partner to work with as your application grows.
 
-### Inital Setup
+### Initial Setup
 
 Make sure you create **a separate directory and a separate GitHub repository for the frontend,**
 
@@ -152,11 +158,145 @@ Tip: you can open up a new tab in terminal window `command + t` if you'd like to
 
 In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files. At minimum you should have a file called `index.js` inside of the `src` folder.
 
-In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "doc" and then press tab to auto-generate the starter HTML.
+In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "doc" and then press tab to auto-generate the starter HTML. If you'd like to use jQuery, google for "jQuery cdn" and find the appropriate code to add to your html. We'll be using jQuery here because of it's shorter syntax, but we could have chosen to use vanilla JS.
 
-### Example Feature (Fetching Notes)
+##### Optional Setup for Code-Along
+*If you want to code along with the following steps, this repo contains the appropriate files.  There is not a full Rails backend, but notice there is a `db.json` file. We are using a package called [json-server](https://github.com/typicode/json-server) that provides an easy ('easy', as in under 30 seconds) way to make RESTful JSON APIs for development and testing.*
 
-TODO: pick up here
+*Install the package with the command:*
+```
+npm install -g json-server
+```
+
+*Boot up a server with the following command, by default it will run on port 3000*
+```
+json-server --watch db.json
+```
+
+*The package provides you with convential RESTful routes for all CRUD actions.*
+
+### Example Feature (Updating a note)
+
+We want to create the following features:
+
+> As a user, when the page loads I should see a list of notes. Next to the title of each note will be a button to edit that note.
+
+> As a user, when I click the edit button, I will see a form with the values of that note in the input fields. I can make changes, click 'Save Note' and see the changes reflected in the list of notes.
+
+Delivering these features will involve several steps and we will want to be sure **to work iteratively**. We will make it work, and then make it better.
+
+### Step 1: Fetching Notes
+
+It seems like the first step is getting the list of notes to show up on the page. Translating that to more technical langauge, we need to:
+
+1 - on the document ready event, fire off an AJAX fetch request to the index route (i.e GET '/notes')
+
+2 - use the response JSON to append elements to the DOM.
+
+Let's be sure not to overcomplicate our approach, we can (and will) refactor later.  At the same time, we don't want to be debugging the routes in our Rails application trying to figure why our server isn't responding when it turns we forgot to include a script tag linking `src/index.js` in `index.html`.
+
+This may sound silly but step 1 should be:
+```javascript
+/* src/index.js */
+$(document).ready(() => {
+  alert('hello')
+});
+```
+
+Until you see the alert, don't move forward. What would be some reasons you might not see the alert?
+
+Now let's fetch the notes (remember that the route our real backend would be 'http://localhost:3000/api/v1/notes' whereas here we'll make the request to our json-server non-namespaced routes )
+```javascript
+/* src/index.js */
+$(document).ready(() => {
+  fetch('http://localhost:3000/notes')
+    .then(res => res.json())
+    .then(json => console.log(json));
+});
+```
+
+If you see the notes printed to the console, you're good to move forward.
+
+The next step is getting the Notes added to the DOM. No problem, add an empty div or ul element to index.html and go ahead an add each note title, along with an edit button
+```javascript
+/* src/index.js */
+$(document).ready(() => {
+  fetch('http://localhost:3000/notes')
+    .then(res => res.json())
+    .then(json =>
+      json.forEach(note => {
+        const markup = `
+        <li>
+          <h3>${note.title}
+            <button>edit</button>
+          </h3>
+        </li>`;
+
+        $('#notes-list').append(markup);
+      })
+    );
+});
+```
+
+There's many ways to do this. Above is not super pretty, but it works.
+
+### Step 2: Refactor
+
+If our only deliverable was to show text on the page our code would be adequate.  There's a real deficiency with our current implementation though.
+
+Think about the next step where a user clicks one of the edit buttons. Given our current implementation how could we a) determine which note got clicked on and b) show more information about that note (the content of the note)?
+
+Please take a moment to think this through and make sure you understand the following before moving forward.
+
+The only way to solve this problem would be to grab the text of the h3 element from the DOM, use that title to query our backend and do something along the lines of...
+```ruby
+@note = Note.find_by(title: params[:title])
+```
+in our Rails controller. This should feel really annoying. We *just* had access to this data when we retrieved all the notes, but we effectively threw it away.
+
+This is where we can refactor to use Object Orientation. We can take advantage of the encapsulation provided by objects to store *all* the data about a particular note in one place.
+
+A second annoyance we might notice about our current implementation is that when the edit button is clicked, nothing on the button itself indicates what note the button is for. We have to look at the text it's parent h3 element. Let's solve this in our refactor as well.
+
+Refactored code:
+
+```javascript
+/* create a file note.js */
+class Note {
+  constructor(data) {
+    this.id = data.id;
+    this.title = data.title;
+    this.content = data.content;
+    Note.all.push(this);
+  }
+
+  renderListItem() {
+    return `
+    <li>
+      <h3>${this.title}
+        <button data-id=${this.id}>edit</button>
+      </h3>
+    </li>`;
+  }
+}
+
+Note.all = [];
+```
+*Note: if you are not familiar with html5 data-attributes [check them out](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). We totalllyyyy could have taken the id of the note and added it to the DOM in the button's id or class properties.  But this is exactly what data-attributes are for and should make our lives easier. The important takeaway here is that the data our application logic depends on* **lives in the DOM itself and we must put it there somehow.** *Understading that is more important than how exactly we put that data there*
+```javascript
+/* src/index.js */
+$(document).ready(() => {
+  fetch('http://localhost:3000/notes')
+    .then(res => res.json())
+    .then(json => {
+      json.forEach(note => {
+        $('#notes-list').append(new Note(note).renderListItem());
+      });
+    });
+});
+```
+
+
 
 
 
