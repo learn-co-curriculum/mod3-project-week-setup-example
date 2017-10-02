@@ -138,7 +138,7 @@ At this point it is probably a good idea to add some seed data and make sure eve
 # Setting Up the Frontend Client Application
 ![Wild West](http://chrisenss.com/wp-content/uploads/2016/10/wildwest.png)
 
-Coming from Module 2 , you may be used to a framework such as Ruby on Rails being very *opinionated*. That is, it has a lot of options about how your application should be structured.  The same rules don't apply on the frontend, there is not *one right way to structure your code*. Specifically, we are not using any frontend framwork and many of the design decisions will be left up to you.
+Coming from Module 2 , you may be used to a framework such as Ruby on Rails being very *opinionated*. That is, it has a lot of opinions about how your application should be structured.  The same rules don't apply on the frontend, there is *not one right way to structure your code*. Specifically, we are not using any frontend framwork and many of the design decisions will be left up to you.
 
 Here, we'll walk through one feature and provide some example code. The example code will be a reasonable/sensible way to structure this application. You should learn what you can from it and structure your code in a similar pattern.  
 
@@ -146,11 +146,11 @@ The key word here is *similar*, rather than directly copying the patterns shown 
 
 ### Inital Setup
 
-Make sure you create **a separate directory and a separate GitHub repository for the frontend**
+Make sure you create **a separate directory and a separate GitHub repository for the frontend,**
 
 Tip: you can open up a new tab in terminal window `command + t` if you'd like to have your rails server up and running in another tab
 
-In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files. At minimum you should have an file called `src/index.js` inside of the `src` folder.
+In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files. At minimum you should have a file called `index.js` inside of the `src` folder.
 
 In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "doc" and then press tab to auto-generate the starter HTML.
 
