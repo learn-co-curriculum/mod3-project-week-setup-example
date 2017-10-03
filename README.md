@@ -257,7 +257,7 @@ in our Rails controller. This should feel really annoying. We *just* had access 
 
 This is where we can refactor to use Object Orientation. We can take advantage of the encapsulation provided by objects to store *all* the data about a particular note in one place.
 
-A second annoyance we might notice about our current implementation is that when the edit button is clicked, nothing on the button itself indicates what note the button is for. We have to look at the text it's parent h3 element. Let's solve this in our refactor as well.
+A second annoyance we might notice about our current implementation is that when the edit button is clicked, nothing on the button itself indicates what note the button is for. We have to look at the text of it's parent h3 element. Let's solve this in our refactor as well.
 
 Refactored code:
 
@@ -511,17 +511,7 @@ class App {
     //... prev code
 
     $('#update').on('submit', 'form', e => {
-      e.preventDefault();
-      const id = e.target.dataset.id;
-      const note = Note.findById(id);
-      const title = $(e.target)
-        .find('input')
-        .val();
-      const content = $(e.target)
-        .find('textarea')
-        .val();
-
-      const bodyJSON = { title, content };
+      // ... prev code
       this.adapter
         .updateNote(note.id, bodyJSON)
         .then(updatedNote => console.log(updatedNote));
@@ -628,7 +618,7 @@ class App {
   }
 }
 ```
-*Note: we need to be extra sure that every time we call one of the methods on an app instance such as handleEditClick, that the context (i.e. what 'this') is is always the app instance we'd expect. Sometimes when we pass around functions as callbacks the context can get mixed up.  There are several ways to solve this, but notice in the constructor we have code like `this.handleFormSubmit = this.handleFormSubmit.bind(this);`. With this setup, we can bind the correct context once and then not have to worry about it ever again :)*
+*Note: we need to be extra sure that every time we call one of the methods on an app instance such as handleEditClick, that the context (i.e. what 'this' is) is always the app instance we'd expect. Sometimes when we pass around functions as callbacks the context can get mixed up.  There are several ways to solve this, but notice in the constructor we have code like `this.handleFormSubmit = this.handleFormSubmit.bind(this);`. With this setup, we can bind the correct context once and then not have to worry about it ever again :)*
 
 ### Step 6: The Home Stretch, Updating the Note
 
