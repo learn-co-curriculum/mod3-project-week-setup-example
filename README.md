@@ -66,7 +66,7 @@ Imagine we are building out a note sharing application like Evernote.
 
 Since, eventually, our frontend application might be hosted on a specific domain i.e. `http://alwaysnote.com`, we will want all of our backend routes to be *namespaced* to indicate they are routes associated with the API.
 
-An example route might look like `http://alwaysnoteapi.com/api/v1/notes`
+An example route might look like `http://<your-domain>.com/api/v1/notes`
 
 ### Example Controller
 
