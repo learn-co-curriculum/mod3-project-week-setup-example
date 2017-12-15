@@ -68,11 +68,9 @@ Since, eventually, our frontend application might be hosted on a specific domain
 
 An example route might look like `http://<your-domain>.com/api/v1/notes`
 
-You may remember [nested resources in rails](http://guides.rubyonrails.org/routing.html#nested-resources) from Module 2.
-
 ### Example Controller
 
-We'll have a `NotesController` with normal CRUD functionality. But remember we need namespaced routes, and in Rails the file structure and file names of the application are very closely tied to the implementation.
+We'll have a `NotesController` with normal CRUD functionality. But remember we need namespaced routes, and in Rails the file structure and file names of the application are very closely tied to the implementation. You may remember [nested resources in rails](http://guides.rubyonrails.org/routing.html#nested-resources) from Module 2.
 
 Run:
 ```
