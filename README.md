@@ -300,11 +300,11 @@ $(document).ready(() => {
 ### Step 3: Clicking the 'edit' button & showing a form
 Our code above was a true refactoring, we didn't change any functionality, we only changed (& hopefully improved) the implementation details.  
 
-Now let's add the ability to click an edit button and show a filled out form.  As always, when we dealing with handling events we'll want to break this down into a couple steps.
+Now let's add the ability to click an edit button and show a filled out form.  As always, when dealing with handling events we'll want to break this down into a couple steps.
 
-1 - Can we respond to the event at all. First let's just console.log or alert something on a click.
+1 - Can we respond to the event at all. First let's just `console.log` or `alert` something on a click.
 
-2 - Can we then console.log some data specific to the event. We'll try to console.log the whole note object we're trying to edit.
+2 - Can we then `console.log` some data specific to the event. We'll try to `console.log` the whole note object we're trying to edit.
 
 3 - Only after all that is wired up will we attempt to show a form with the correct values
 
