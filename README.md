@@ -461,7 +461,7 @@ app.adapter.fetchNotes().then(json => {
 });
 ```
 
-What then is the return value of `app.adapter.fetchNotes()`? Something that we can call `.then` on must be a promise!  All of our adapter methods should return promises that we can then chain `.then` onto and manipulate the data as needed. This is cool because the adapter can hide away some of the implementation details of `fetch`, such as setting the headers, converting the response into json etc.
+What then is the return value of `app.adapter.fetchNotes()`? Something that we can call `.then` on must be a promise!  All of our adapter methods should return promises that we can then chain `.then` onto and manipulate the data as needed. This is cool because the adapter can hide away some of the implementation details of `fetch`, such as setting the headers, converting the response into json, [error handling our fetch requests](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), etc.
 
 ```javascript
 /* src/adapter.js */
