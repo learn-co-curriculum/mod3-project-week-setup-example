@@ -32,7 +32,7 @@ _(Replace `<my_app_name>` with the actual name of your project)_
 
 * Navigate to your Gemfile and uncomment `gem 'rack-cors'` This will allow us to setup Cross Origin Resource Sharing (CORS) in our API. You can read more about CORS [here](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
 
-  * Basically, CORS is a security feature that prevents API calls from unknown origins. For example, if someone tried to use some malicious JavaScript to steal your bank information and your bank allowed API calls from anywhere, this could be a bad news bears(TM) situation.
+  * Basically, CORS is a security feature that prevents API calls from unknown origins. For example, if someone tried to use some malicious JavaScript to steal your bank information and your bank allowed API calls from anywhere, this could be a bad news bears™️ situation.
 
 - Make sure you add the `gem 'active_model_serializers'` to your Gemfile. Read [this](https://en.wikipedia.org/wiki/Serialization) if you're curious about serialization. Essentially, we need to convert our data into a format that can be easily transferred across a network as a string and reconstructed later. Remember, our frontend and backend live in different repositories and therefore have to make requests across the _interwebs_.
 
@@ -69,9 +69,9 @@ Read the [getting started documentation](https://github.com/rails-api/active_mod
 
   Inside the `allow` block, `origins '*'` means we are allowing requests from **all** origins and are allowing `[:get, :post, :patch, :delete]` requests to the API. Read [this](https://www.w3schools.com/tags/ref_httpmethods.asp) if you need a refresher on HTTP methods.
 
-  This may come as a shock but `config.api_only = true` tells our app that it is going to be an **API only**. In other words, our API **will not generate any HTML** and instead will return JSON. The frontend is responsible for taking that JSON, formatting the data, and generating HTML to show to the user. Read [this](https://www.w3schools.com/js/js_json_intro.asp) if you want to review what JSON is and why we use it.
+  This may come as a shock but the `config.api_only = true` option found in `config/application.rb` tells our app that it is going to be an **API only**. In other words, our API **will not generate any HTML** and instead will return JSON. The frontend is responsible for taking that JSON, formatting the data, and generating HTML to show to the user. Read [this](https://www.w3schools.com/js/js_json_intro.asp) if you want to review what JSON is and why we use it.
 
-  For now, we will leave the origins open. Later on, we can change this to only allow requests from the address of the frontend repo––localhost:8000 for example.
+  For now, we will leave the origins open. Later on, we can change this to only allow requests from the address of the frontend repo––localhost:8000 or `www.myapp.com` for example.
 
 ### Routes & Controller
 
@@ -85,39 +85,43 @@ An example route might look like `http://<your-domain>.com/api/v1/notes`
 
 We'll have a `NotesController` with normal CRUD functionality. But remember we need namespaced routes, and in Rails the file structure and file names of the application are very closely tied to the implementation. You may remember [nested resources in rails](http://guides.rubyonrails.org/routing.html#nested-resources) from Module 2.
 
-In your console run: `rails g controller api/v1/Notes`.
+In your console run: `rails g controller api/v1/Notes`
 
 Notice that the controller file this created lives in `/app/controllers/api/v1/notes_controller.rb` and the actual class name of the controller is namespaced like `Api::V1::NotesController` as well.
 
 **Note on API Versioning:**
-_This is the first version of our API. Therefore, the controller should go inside api/v1. If anyone is relying on our API and we update the code in a way that would break other people's projects, it's good practice to make that update its own version of the API. Read [this](https://chriskottom.com/blog/2017/04/versioning-a-rails-api/) if you're curious about API versioning._
+_This is the first version of our API. Therefore, the controller should go inside api/v1. If anyone is relying on our API and we update the code in a way that would break other people's projects, it's good practice to make that update its own version of the API. Read [this](https://chriskottom.com/blog/2017/04/versioning-a-rails-api/) if you want a deeper dive into api versioning._
+
+---
 
 We'll only be dealing with the index and update actions for this example `/app/controllers/api/v1/notes_controller`:
 
 ```ruby
 class Api::V1::NotesController < ApplicationController
-
+  before_action :find_note, only: [:update]
   def index
     @notes = Note.all
     render json: @notes
   end
 
   def update
-    @note = Note.find(params[:id])
-
     @note.update(note_params)
     if @note.save
-      render json: @note
+      render json: @note, status: :accepted
     else
-      render json: {errors: @note.errors.full_messages}, status: 422
+      render json: { errors: @note.errors.full_messages }, status: :unprocessible_entity
     end
   end
 
   private
+
   def note_params
     params.permit(:title, :content)
   end
 
+  def find_note
+    @note = Note.find(params[:id])
+  end
 end
 ```
 
@@ -141,6 +145,18 @@ Rails.application.routes.draw do
 end
 ```
 
+### Generating a Model
+
+From your terminal, run `rails g model Notes title content`
+
+Remember that rails will default to `string` if we don't specify a type for title, content or any other attributes.
+
+Then run `rails db:create && rails db:migrate`
+
+Now that our model and table is setup, we should be able to create a new note in the console
+
+Test this by running `rails c` then `Note.create(title: 'buy groceries', content: 'need bagels')`
+
 ### Test Out your Application
 
 Your API now has two working _endpoints_, or routes that it exposes to the public. To see all the notes, for example, we could navigate to `http://localhost:3000/api/v1/notes`
@@ -161,17 +177,24 @@ Coming from Module 2, you may be used to a framework such as Ruby on Rails being
 
 Here, we'll walk through one feature and provide some example code. The example code will demonstrate a reasonable/sensible way to structure this application. You should learn what you can from it and structure your code in a similar pattern.
 
-The key word here is _similar_, rather than directly copying the patterns shown, try to apply the principles you have learned (oo, single responsibility principle, encapsulation) to make code that will be easy for you and your partner to work with as your application grows.
+The key word here is _similar_, rather than directly copying the patterns shown, try to apply the principles you have learned (oo, single responsibility principle, encapsulation) to make code that will be easy for you as your application grows.
 
 ### Initial Setup
 
 Make sure you create **a separate directory and a separate GitHub repository for the frontend.**
 
-Tip: you can open up a new tab in terminal window `command + t` if you'd like to have your rails server up and running in another tab
+Tip: you can open up a new tab in terminal `command + t` if you'd like to have your rails server up and running in another tab.
 
-In the new folder you create you should touch a file called `index.html` and create a folder called `src` in which you will add your JavaScript files. At minimum you should have a file called `index.js` inside of the `src` folder.
+Create a new folder for the frontend: `mkdir notes_frontend && cd $_`
+(The `cd $_` command will move you into the folder you've just created)
 
-In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "doc" and then press tab to auto-generate the starter HTML.
+In the new folder you create you should `touch index.html` and `mkdir src` in which you will add your JavaScript files. At minimum you should have a file called `index.js` inside of the `src` folder.
+
+In `index.html`, you need to add some HTML. Text editors will often have a shortcut for creating a blank HTML document. In Atom you can begin typing "html" and then press tab to auto-generate the starter HTML.
+
+Go ahead and copy/paste the starter html found in this codealong repo.
+
+---
 
 ##### Optional (and very easy) Setup for Code-Along
 
@@ -182,6 +205,10 @@ _Install the package with the command:_ `npm install -g json-server`
 _Boot up a server with the following command, by default it will run on port 3000_: `json-server --watch db.json`
 
 _The package provides you with conventional RESTful routes for all CRUD actions._
+
+Otherwise, feel free to use the rails backend we created in the first half of this codealong
+
+---
 
 ### Example Feature (Updating a note)
 
@@ -197,18 +224,18 @@ Delivering these features will involve several steps and we will want to be sure
 
 The first step is getting the list of notes to show up on the page. Translating that to more technical language, we need to:
 
-1 - on the document ready event, fire off an AJAX fetch request to the index route (i.e GET '/notes')
+1 - Fire off an AJAX fetch request to the index route (i.e GET '/notes')
 
-2 - use the response JSON to append elements to the DOM.
+2 - Use the response JSON to append elements to the DOM.
 
-Let's be sure not to overcomplicate our approach, we can (and will) refactor later. At the same time, we don't want to be debugging the routes in our Rails application trying to figure why our server isn't responding when it turns we forgot to include a script tag linking `src/index.js` in `index.html`.
+Let's be sure not to overcomplicate our approach, we can (and will) refactor later. At the same time, we don't want to be debugging the routes in our Rails application trying to figure why our server isn't responding when it turns out we forgot to include a script tag linking `src/index.js` in `index.html`. Speaking of which, don't forget to add `<script src="src/index.js" charset="utf-8"></script>` to the head of your `index.html`
 
 This may sound silly but step 1 should be:
 
 ```javascript
 /* src/index.js */
 document.addEventListener('DOMContentLoaded', () => {
-  alert('hello');
+  alert('LOADED');
 });
 ```
 
@@ -216,10 +243,21 @@ Until you see the alert, don't move forward. What would be some reasons you migh
 
 Now let's fetch the notes (remember that the route our real backend would be 'http://localhost:3000/api/v1/notes' whereas here we'll make the request to our json-server non-namespaced routes )
 
+### SUPER IMPORTANT
+
+If you're using the `json-server` package for your server, your endpoint should be `http://localhost:3000/notes` and `http://localhost:3000/api/v1/notes` if you're using the server we built in part one.
+
+Let's save ourselves trouble in the future and add this to the top of our `index.js`
+
+`const endPoint = <YOUR_ENDPOINT>`
+
+---
+
 ```javascript
 /* src/index.js */
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:3000/notes')
+  const endPoint = 'http://localhost:3000/api/v1/notes';
+  fetch(endPoint)
     .then(res => res.json())
     .then(json => console.log(json));
 });
@@ -232,7 +270,8 @@ The next step is getting the Notes added to the DOM. No problem, add an empty di
 ```javascript
 /* src/index.js */
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:3000/notes')
+  const endPoint = 'http://localhost:3000/api/v1/notes';
+  fetch(endPoint)
     .then(res => res.json())
     .then(json =>
       json.forEach(note => {
@@ -243,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </h3>
         </li>`;
 
-        document.querySelector('#notes-list').innerHTML = markup;
+        document.querySelector('#notes-list').innerHTML += markup;
       })
     );
 });
@@ -258,6 +297,8 @@ If our only deliverable was to show text on the page, our code would be sufficie
 Think about the next step where a user clicks one of the edit buttons. Given our current implementation how could we a) determine which note got clicked on and b) show more information about that note (the content of the note)?
 
 Please take a moment to think this through and make sure you understand the following before moving forward.
+
+---
 
 The only way to solve this problem would be to grab the text of the h3 element from the DOM, use that title to query our backend and do something in our Rails controller along the lines of...
 
@@ -274,7 +315,7 @@ A second annoyance we might notice about our current implementation is that when
 Refactored code:
 
 ```javascript
-/* create a file note.js */
+/* create a file src/note.js and link to it from your index.html */
 class Note {
   constructor(data) {
     this.id = data.id;
@@ -296,12 +337,16 @@ class Note {
 Note.all = [];
 ```
 
-_Note: if you are not familiar with html5 data-attributes [check them out](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). We totalllyyyy could have taken the id of the note and added it to the DOM in the button's id or class properties. But this is exactly what data-attributes are for and should make our lives easier. The important takeaway here is that the data our application logic depends on_ **lives in the DOM itself and we must put it there somehow.** _Understanding that is more important than how exactly we put that data there._
+Note: if you are not familiar with html5 data-attributes [check them out](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes).
+We totalllyyyy could have taken the id of the note and added it to the DOM in the button's id or class properties. However, html ids and classes are typically used for css, not to store data.
+
+But this is exactly what data-attributes are for and should make our lives easier. The important takeaway here is that the data our application logic depends on **lives in the DOM itself and we must put it there somehow.** _Understanding that is more important than how exactly we put that data there._
 
 ```javascript
 /* src/index.js */
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:3000/notes')
+  const endPoint = 'http://localhost:3000/api/v1/notes';
+  fetch(endPoint)
     .then(res => res.json())
     .then(json => {
       json.forEach(note => {
@@ -318,7 +363,7 @@ Our code above was a true refactoring: we didn't change any functionality, we on
 
 Now let's add the ability to click an edit button and show a filled out form. As always, when dealing with handling events we'll want to break this down into a couple steps.
 
-1 - Can we respond to the event at all. First let's just `console.log` or `alert` something on a click.
+1 - Can we respond to the event at all? First let's just `console.log` or `alert` something on a click.
 
 2 - Can we then `console.log` some data specific to the event. We'll try to `console.log` the whole note object we're trying to edit.
 
@@ -326,7 +371,7 @@ Now let's add the ability to click an edit button and show a filled out form. As
 
 The first step, though straightforward, involves some decision making--where should the code that attaches the event listener go?
 
-There is not a right answer here. An argument could be made it is the responsibility of the Note class, something like `Note.addEditListeners()`. The choice we will go with is to make a class called `App` that will be responsible for higher level things like attaching event listeners.
+There is no right answer here. An argument could be made that it is the responsibility of the Note class, something like `Note.addEditListeners()`. The choice we will go with is to make a class called `App` that will be responsible for higher level things like attaching event listeners.
 
 ```javascript
 /* src/app.js */
@@ -347,29 +392,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const app = new App();
   app.attachEventListeners();
 
-  fetch('http://localhost:3000/notes')
-    .then(res => res.json())
-    .then(json => {
-      json.forEach(note => {
-        const newNote = new Note(note);
-        document.querySelector('#notes-list').innerHTML += newNote.renderListItem();
-      });
-    });
+  /*your previous code below...*/
 });
 ```
 
 When the page loads we'll create an instance of our App and call the `attachEventListeners` function. If you see 'clicked' in the console move on to the next step.
+
+---
 
 You are very much encouraged to try to get the next step working on your own. You need to a) grab the data-id of the clicked button out of the DOM and b) find the associated note instance. Try it on your own. Below is an implementation that works.
 
 ```javascript
 /* src/app.js */
 class App {
-  constructor() {}
-
   attachEventListeners() {
     document.querySelector('#notes-list').addEventListener('click', e => {
-      const id = e.target.dataset.id;
+      const id = parseInt(e.target.dataset.id);
       const note = Note.findById(id);
       console.log(note);
     });
@@ -420,7 +458,7 @@ class Note {
 class App {
   attachEventListeners() {
     document.querySelector('#notes-list').addEventListener('click', e => {
-      const id = e.target.dataset.id;
+      const id = parseInt(e.target.dataset.id);
       const note = Note.findById(id);
       document.querySelector('#update').innerHTML = note.renderUpdateForm();
     });
@@ -432,7 +470,11 @@ class App {
 
 When the form is submitted we need to make a PATCH request to our server to update this note record in our database. Like before, we will start with a straightforward approach and refactor.
 
-It seems like we already have a place in our app where we attach event listeners. Let's add our code there. I will skip a few steps here and go straight to the implementation. When you are trying to grab data from the DOM in your own projects (code like `const title = $(e.target).find('input').val();`), open up the console, use a debugger, and play around!
+It seems like we already have a place in our app where we attach event listeners. Let's add our code there. I will skip a few steps here and go straight to the implementation. When you are trying to grab data from the DOM in your own projects try things like
+
+`const title = e.target.querySelector('input').value;`
+
+Open up the console, use a debugger, and play around!
 
 ```javascript
 class App {
@@ -440,17 +482,16 @@ class App {
     // prev code...
     document.querySelector('#update').addEventListener('submit', e => {
       e.preventDefault();
-      const id = e.target.dataset.id;
+      const id = parseInt(e.target.dataset.id);
       const note = Note.findById(id);
       const title = e.target.querySelector('input').value;
       const content = e.target.querySelector('textarea').value;
 
       const bodyJSON = { title, content };
-      fetch(`http://localhost:3000/notes/${note.id}`, {
+      fetch(`http://localhost:3000/api/v1/notes/${note.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          // TODO: make accept a string
           Accept: 'application/json',
         },
         body: JSON.stringify(bodyJSON),
@@ -481,7 +522,7 @@ app.adapter.fetchNotes().then(json => {
 });
 ```
 
-What then is the return value of `app.adapter.fetchNotes()`? Something that we can call `.then` on must be a promise! All of our adapter methods should return promises that we can then chain `.then` onto and manipulate the data as needed. This is cool because the adapter can hide away some of the implementation details of `fetch`, such as setting the headers, converting the response into json, [error handling our fetch requests](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), etc.
+What then is the return value of `app.adapter.fetchNotes()`? Something that we can call `.then` on, so it must be a promise! All of our adapter methods should return promises that we can then chain `.then` onto and manipulate the data as needed. This is cool because the adapter can hide away some of the implementation details of `fetch`, such as setting the headers, converting the response into json, [error handling our fetch requests](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), etc.
 
 ```javascript
 /* src/adapter.js */
@@ -529,9 +570,14 @@ class App {
 
   attachEventListeners() {
     //... prev code
-    document.querySelector('#update').addEventListener('submit', (e) => {
-      this.adapter.updateNote(note.id, bodyJSON).then((updatedNote) => console.log(updatedNote));
-    })
+    document.querySelector('#update').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = parseInt(e.target.dataset.id);
+      const note = Note.findById(id);
+      const title = e.target.querySelector('input').value;
+      const content = e.target.querySelector('textarea').value;
+      const jsonBody = { title, content };
+      this.adapter.updateNote(note.id, jsonBody).then(updatedNote => console.log(updatedNote));
     });
   }
 }
@@ -549,10 +595,9 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 ```javascript
-/* src/adapter.js */
 class Adapter {
   constructor() {
-    this.baseUrl = 'http://localhost:3000';
+    this.baseUrl = 'http://localhost:3000/api/v1/';
     this.headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -583,6 +628,7 @@ class Adapter {
 
 ```javascript
 /* src/app.js */
+/* src/app.js */
 class App {
   constructor() {
     this.adapter = new Adapter();
@@ -601,31 +647,34 @@ class App {
   // notice the previous functionality is broken up
   // into two different methods for future re-use...
   createNotes(notes) {
-    notes.forEach((note) => {
+    notes.forEach(note => {
       new Note(note);
     });
     this.addNotes();
   }
 
   addNotes() {
-    Note.all.forEach((note) => document.querySelector('#notes-list').innerHTML += note.renderListItem()
+    document.querySelector('#notes-list').innerHTML = '';
+    Note.all.forEach(
+      note => (document.querySelector('#notes-list').innerHTML += note.renderListItem())
+    );
   }
 
   handleFormSubmit(e) {
     e.preventDefault();
-    const id = e.target.dataset.id;
+    const id = parseInt(e.target.dataset.id);
     const note = Note.findById(id);
-    const title = e.target.querySelector('input').value
-    const content = e.target.querySelector('textarea').value
+    const title = e.target.querySelector('input').value;
+    const content = e.target.querySelector('textarea').value;
 
     const bodyJSON = { title, content };
-    this.adapter.updateNote(note.id, bodyJSON).then((updatedNote) => console.log(updatedNote));
+    this.adapter.updateNote(note.id, bodyJSON).then(updatedNote => console.log(updatedNote));
   }
 
   handleEditClick(e) {
-    const id = e.target.dataset.id;
+    const id = parseInt(e.target.dataset.id);
     const note = Note.findById(id);
-    document.querySelector('#update').innerHTML = note.renderUpdateForm()
+    document.querySelector('#update').innerHTML = note.renderUpdateForm();
   }
 }
 ```
@@ -654,9 +703,10 @@ class App {
   // ...
 
   addNotes() {
-    // TODO: change
-    $('#notes-list').empty(); /* clear out whatever is there */
-    Note.all.forEach(note => $('#notes-list').append(note.renderListItem()));
+    document.querySelector('#notes-list').innerHTML = '';
+    Note.all.forEach(
+      note => (document.querySelector('#notes-list').innerHTML += note.renderListItem())
+    );
   }
 
   handleFormSubmit(e) {
@@ -681,7 +731,7 @@ class Note {
 }
 ```
 
-_Note: If you are not familiar with what is going on in the line `update({ title, content })`, look into [ES6 Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)_
+Note: If you are not familiar with what is going on in the line `update({ title, content })`, look into [ES6 Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)\_
 
 ![thats all](https://media.giphy.com/media/mR3dXKpI6P8CA/giphy.gif)
 
