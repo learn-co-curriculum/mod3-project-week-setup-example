@@ -153,6 +153,8 @@ Remember that rails will default to `string` if we don't specify a type for titl
 
 Then run `rails db:create && rails db:migrate`
 
+*Important!* When using `postgres` for our database, we need to run `rails db:create` before migrating. Make sure you don't skip that step
+
 Now that our model and table is setup, we should be able to create a new note in the console
 
 Test this by running `rails c` then `Note.create(title: 'buy groceries', content: 'need bagels')`
