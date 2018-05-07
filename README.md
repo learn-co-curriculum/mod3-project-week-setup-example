@@ -26,6 +26,8 @@ _(Replace `<my_app_name>` with the actual name of your project)_
 
 * This will generate a new rails project using Postgresql as the database. Postgresql is just a type of SQL database. **Make sure you are running Postgres on your computer**. Look for the elephant icon at the top of your screen. We'll want to use Postgres in case you want to push this application to production on Heroku (which does not support Sqlite databases).
 
+You should have installed postgres when you initially setup your machine. If it's not on your computer, [you can download it here](http://postgresapp.com/)
+
 * We specify the `--api` flag so rails knows to set this up as an API.
 
 * `cd` into the new project folder you just created.
