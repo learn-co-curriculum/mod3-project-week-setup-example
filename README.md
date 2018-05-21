@@ -633,7 +633,6 @@ class Adapter {
 
 ```javascript
 /* src/app.js */
-/* src/app.js */
 class App {
   constructor() {
     this.adapter = new Adapter();
