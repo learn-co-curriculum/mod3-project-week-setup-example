@@ -150,7 +150,7 @@ end
 
 ### Generating a Model
 
-From your terminal, run `rails g model Notes title content`
+From your terminal, run `rails g model Note title content`
 
 Remember that rails will default to `string` if we don't specify a type for title, content or any other attributes.
 
