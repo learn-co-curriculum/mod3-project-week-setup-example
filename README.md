@@ -533,7 +533,7 @@ What then is the return value of `app.adapter.fetchNotes()`? Something that we c
 /* src/adapter.js */
 class Adapter {
   constructor() {
-    this.baseUrl = 'http://localhost:3000';
+    this.baseUrl = 'http://localhost:3000/api/v1';
   }
   fetchNotes() {
     return fetch(`${this.baseUrl}/notes`).then(res => res.json());
