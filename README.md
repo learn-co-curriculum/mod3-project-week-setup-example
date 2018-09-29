@@ -6,7 +6,7 @@
 
 You will be building a Ruby on Rails backend and JavaScript frontend project this week. Two applications talking to each other means there will be a lot of moving parts! This document will walk you through setting up your project. The instructions and requirements for this assignment can be found [here](https://github.com/learn-co-curriculum/js-final-project-guidelines)
 
-We are going to need two separate repositories. This guide has everything in one repo for simplicity, but your JS should be in one repo and your API in another.
+We are going to need two separate repositories. This guide has everything in one repo for simplicity, but your JS should be in one repo and your API in another. This makes things _much easier_ to deploy if your frontend and backend are separated in two repos.
 
 ## Setting Up the Backend Rails API
 
