@@ -41,7 +41,9 @@ You should have installed postgres when you initially setup your machine. If it'
 
 - We can use the serializer gem to specify the shape of our data when making requests. For example, if a `post` instance `has_many` `comments`, we can tell our serializer to nest the data.
 
-`PostSerializer`
+- Run `rails g serializer post` to generate a Serializer for our Post model. Edit the generated file to specify that each Post should be serialzed as a network response with its `title` and `comments`.
+
+`PostSerializer` 
 
 ```ruby
 class PostSerializer < ActiveModel::Serializer
